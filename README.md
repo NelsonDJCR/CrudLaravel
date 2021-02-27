@@ -15,3 +15,9 @@ $data['nameInputImg'] = $request->file('nameInputImg')->store('upload', 'public'
 }
 
 $datos['customers']= Customers::paginate(3);
+
+
+alert('Hello world');
+confirm('¿Delete?');
+
+Add Get Attrr
