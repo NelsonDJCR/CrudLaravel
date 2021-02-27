@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Empleado;
+use App\Models\Customers;
 use Illuminate\Http\Request;
 
-class EmpleadoController extends Controller
+class CustomersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,8 @@ class EmpleadoController extends Controller
      */
     public function index()
     {
-        //
+        $datos['customers']= Customers::paginate(3);
+        return view('pages.index', $datos);
     }
 
     /**
@@ -35,27 +36,37 @@ class EmpleadoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $request = request()->all();
+        $data = request()->except('_token');
+
+        if ($request->hasFile('photo')) {
+            $data['photo'] = $request->file('photo')->store('upload', 'public');
+        }
+        if (Customers::insert($data)) {
+            return 1;
+        }else{
+            return 0;
+        }
+        
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Empleado  $empleado
+     * @param  \App\Models\Customers  $customers
      * @return \Illuminate\Http\Response
      */
-    public function show(Empleado $empleado)
+    public function show(Customers $customers)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Empleado  $empleado
+     * @param  \App\Models\Customers  $customers
      * @return \Illuminate\Http\Response
      */
-    public function edit(Empleado $empleado)
+    public function edit(Customers $customers)
     {
         //
     }
@@ -64,10 +75,10 @@ class EmpleadoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Empleado  $empleado
+     * @param  \App\Models\Customers  $customers
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Empleado $empleado)
+    public function update(Request $request, Customers $customers)
     {
         //
     }
@@ -75,11 +86,12 @@ class EmpleadoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Empleado  $empleado
+     * @param  \App\Models\Customers  $customers
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Empleado $empleado)
+    public function destroy($id)
     {
-        //
+        Customers::destroy($id);
+        return redirect('customers');
     }
 }
